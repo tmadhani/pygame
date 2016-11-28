@@ -3,10 +3,12 @@
 import pygame
 import random
 import math
+import sys
 pygame.init()
 
 #colors for game sprites
 brick_red = (255, 0, 0)
+brick_blue = (0,255,0)
 ball_white = (255,255,255)
 paddle_green = (50, 205, 50)
 background_black = (0,0,0)
@@ -19,37 +21,35 @@ pygame.display.update()
 brick_width = 50
 brick_height = 10
 
+#paddle height and width
+paddle_height = 50
+paddle_width = 10
+
+
 #positions
 x = 0
 y = 0
 
-gameExit = False
-while not gameExit:
-	game.Display.fill(background_black)
+#creating a class
 
-	for event in pygame.event.get():
-		if event.type == pygame.QUIT:
-			gameExit = True
-		if event.type == pygame.KEYDOWN:
-			x_delta = 0
-			y_delta = 0
-			if event.key == pygame.K_LEFT:
-				x_delta -= 5
-			if event.key == pygame.K_RIGHT:
-				x_delta += 5
-			if event.key == pygame.K_UP:
-				y_delta -= 5
-			if event.key == pygame.K_DOWN:
-				y_delta += 5
-		x += x_delta
-		y += y_delta
-
-class Brick(pygame.sprite.Sprite):
-	def __init__(self, color = brick_red, x = 0, y = 0):
-		self.image()
-
-
-
+class Red_Block(pygame.sprite.Sprite):
+ 
+    def __init__(self, color, x, y):
+        super().__init__()
+        self.image = pygame.Surface([brick_width, brick_height])
+        self.image.fill(brick_red)
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        
+class Blue_Block(pygame.sprite.Sprite):
+	def __init__(self, color, x, y):
+		super().__init__()
+		self.image = pygame.Surface([brick_width,brick_height])
+		self.image.fill(brick_blue)
+		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
 
 
 
