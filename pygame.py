@@ -32,7 +32,7 @@ y = 0
 
 #creating a class
 
-class Red_Block(pygame.sprite.Sprite):
+class Red_Party(pygame.sprite.Sprite):
  
     def __init__(self, color, x, y):
         super().__init__()
@@ -42,7 +42,7 @@ class Red_Block(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-class Blue_Block(pygame.sprite.Sprite):
+class Blue_Party(pygame.sprite.Sprite):
 	def __init__(self, color, x, y):
 		super().__init__()
 		self.image = pygame.Surface([brick_width,brick_height])
@@ -54,9 +54,11 @@ class Blue_Block(pygame.sprite.Sprite):
 class Paddle(pygame.sprite.Sprite):
 	def __init__(self, color):
 		super().__init__()
+
 class Ball(pygame.sprite.Sprite):
 	def __init__(self, color):
 		super().__init__()
+
 
 
 
