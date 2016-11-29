@@ -56,9 +56,35 @@ class Paddle(pygame.sprite.Sprite):
 		super().__init__()
 
 class Ball(pygame.sprite.Sprite):
+	hit_count = 0
+	velocity = 4.0
+
+	x = 0.0
+	y = 180.0
+
+	direction = 250
+
+	height = 10
+	width = 10
+
+	self.image = pygame.Surface([self.width, self.height])
+	self.image.fill(ball_white)
+	self.rect = self.image.get_rect()
+
 	def __init__(self, color):
 		super().__init__()
 
+	def increment_hit(self):
+		self.hit_count = self.hit_count + 1
+		if self.hit_count % 1 == 0:
+			for ball in self.balls:
+				ball.velocity = ball.velocity + 10
+
+dems = pygame.sprite.Group()
+reps = pygame.sprite.Group()
+
+for row in range(3):
+	for column in range(30):
 
 
 
