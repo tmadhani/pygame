@@ -41,7 +41,7 @@ class Red_Block(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
-        
+
 class Blue_Block(pygame.sprite.Sprite):
 	def __init__(self, color, x, y):
 		super().__init__()
@@ -50,6 +50,13 @@ class Blue_Block(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
+
+class Paddle(pygame.sprite.Sprite):
+	def __init__(self, color):
+		super().__init__()
+class Ball(pygame.sprite.Sprite):
+	def __init__(self, color):
+		super().__init__()
 
 
 
