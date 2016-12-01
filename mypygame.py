@@ -72,27 +72,38 @@ class Paddle(pygame.sprite.Sprite):
 		self.rect.x = p[0]
 		#self.rect.y = p[1]
 
-class Ball(pygame.sprite.Sprite):
+# class Ball(pygame.sprite.Sprite):
 
 
-	def __init__(self, x, y):
-		super().__init__()
-		self.image = pygame.Surface([ball_width, ball_height])
-		self.image.fill(ball_white)
-		self.rect = self.image.get_rect()
-		hit_count = 0
-		velocity = 4.0
+# 	def __init__(self, x, y):
+# 		super().__init__()
+# 		self.image = pygame.Surface([ball_width, ball_height])
+# 		self.image.fill(ball_white)
+# 		self.rect = self.image.get_rect()
+		
+# 		hit_count = 0
+# 		velocity = 4.0
 
-		x = 0.0
-		y = 180.0
+# 		direction = random.randint(200,300)
 
-		direction = random.randint(200,300)
+# 		height = 10
+# 		width = 10
 
-		height = 10
-		width = 10
+# 		self.screenheight = pygame.display.get_surface().get_height()
+# 		self.screenwidth = pygame.display.get_surface().get_width()
 
-		self.rect.x = x
-		self.rect.y = y
+# 	def deflect(self):
+# 		self.direction = (180 - self.direction) % 360
+# 		self.direction = self.direction - ball_presence
+
+# 	def ball_bounce(self):
+# 		ball_move = math.radians(self.direction)
+# 		self.x = self.x + (self.velocity * math.sin(ball_move))
+# 		self.y -= (self.velocity & math.cos(ball_move))
+
+# 		self.rect.x = x
+# 		self.rect.y = y
+
 	
 	# def hit(self, target)
 	# 	return self.rect.colliderect(target)
@@ -128,19 +139,30 @@ class Ball(pygame.sprite.Sprite):
 
 # pygame.init()
 
-b = Blue_Party(100, 100)
+b = pygame.sprite.Group()
 r = Red_Party(50, 50)
 p = Paddle(275, 390)
-bl = Ball(275, 380)
-sprites = RenderPlain(b, r, p, bl)
+y_pos = 50
+num_blocks = 12
+
+for row in range(0,4):
+	for column in range(0,num_blocks):
+		dems = Blue_Party(column * (brick_width + 2) + 1, num_blocks)
+		b.add(dems)
+	num_blocks += brick_height + 1
+# bl = Ball(275, 380)
+sprites = RenderPlain(b, r, p)
 
 while True:
 	e = event.poll()
 	if e.type == QUIT:
 		quit()
 		break
-	# elif:
-	# 	e.type == 
+	# else:
+	# 	if pygame.sprite.spritecollide(p, bl, False):
+	# 		ball_presence = (p.rect.x + p.width/2) - (b.rect.x+b.width/2)
+	# 		b.rect.y = screen.get_height() - p.rect.height - b.rect.height - 1
+	# 		b.bounce(ball_presence)
 	gameDisplay.fill(background_black)
 	p.move()
 	sprites.update()
