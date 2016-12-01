@@ -18,6 +18,7 @@ gameDisplay = pygame.display.set_mode((600,400))
 pygame.display.set_caption("Breakout")
 pygame.display.update()
 
+mouse.set_visible(False)
 #set brick sprite height/wdith
 brick_width = 50
 brick_height = 10
@@ -25,6 +26,10 @@ brick_height = 10
 #paddle height and width
 paddle_height = 10
 paddle_width = 50
+
+#ball height and width
+ball_width = 10
+ball_height = 10
 
 
 #positions
@@ -70,8 +75,11 @@ class Paddle(pygame.sprite.Sprite):
 class Ball(pygame.sprite.Sprite):
 
 
-	def __init__(self, color):
+	def __init__(self, x, y):
 		super().__init__()
+		self.image = pygame.Surface([ball_width, ball_height])
+		self.image.fill(ball_white)
+		self.rect = self.image.get_rect()
 		hit_count = 0
 		velocity = 4.0
 
@@ -83,11 +91,13 @@ class Ball(pygame.sprite.Sprite):
 		height = 10
 		width = 10
 
-		self.image = pygame.Surface([self.width, self.height])
-		self.image.fill(ball_white)
-		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
 	
-# 	def increment_hit(self):
+	# def hit(self, target)
+	# 	return self.rect.colliderect(target)
+
+# def increment_hit(self):
 # 		self.hit_count = self.hit_count + 1
 # 		if self.hit_count % 1 == 0:
 # 			for ball in self.balls:
@@ -121,7 +131,8 @@ class Ball(pygame.sprite.Sprite):
 b = Blue_Party(100, 100)
 r = Red_Party(50, 50)
 p = Paddle(275, 390)
-sprites = RenderPlain(b, r, p)
+bl = Ball(275, 380)
+sprites = RenderPlain(b, r, p, bl)
 
 while True:
 	e = event.poll()
