@@ -1,11 +1,13 @@
 #TANYA'S BREAKOUT GAME
+#gold game from Colleen's repo
 import pygame
+import random
 from pygame import *
 from pygame.sprite import *
 pygame.init()
 #colors for game sprites
 brick_red = (255, 0, 0)
-brick_blue = (0,255,0)
+brick_blue = (0,0,255)
 ball_white = (255,255,255)
 paddle_green = (50, 205, 50)
 background_black = (0,0,0)
@@ -21,8 +23,8 @@ brick_width = 50
 brick_height = 10
 
 #paddle height and width
-paddle_height = 50
-paddle_width = 10
+paddle_height = 10
+paddle_width = 50
 
 
 #positions
@@ -32,8 +34,7 @@ y = 0
 #creating a class
 
 class Red_Party(pygame.sprite.Sprite):
- 
-    def __init__(self, color, x, y):
+    def __init__(self, x, y):
         super().__init__()
         self.image = pygame.Surface([brick_width, brick_height])
         self.image.fill(brick_red)
@@ -42,7 +43,7 @@ class Red_Party(pygame.sprite.Sprite):
         self.rect.y = y
 
 class Blue_Party(pygame.sprite.Sprite):
-	def __init__(self, color, x, y):
+	def __init__(self, x, y):
 		super().__init__()
 		self.image = pygame.Surface([brick_width,brick_height])
 		self.image.fill(brick_blue)
@@ -51,38 +52,40 @@ class Blue_Party(pygame.sprite.Sprite):
 		self.rect.y = y
 
 class Paddle(pygame.sprite.Sprite):
-	def __init__(self, color, x, y):
+	def __init__(self, x, y):
 		super().__init__()
 		self.image = pygame.Surface([paddle_width, paddle_height])
 		self.image.fill(paddle_green)
 		self.rect = self.image.get_rect()
 		self.screenheight = pygame.display.get_surface().get_height()
 		self.screenwidth = pygame.display.get_surface().get_width()
-		self.rect.x = 0
-		self.rect.y = self.screenheight-self.height
-	def move(self, x, y):
+		self.rect.x = x
+		self.rect.y = y
+	
+	def move(self):
 		p = pygame.mouse.get_pos()
-		self.rect.x = pos[0]
+		self.rect.x = p[0]
+		#self.rect.y = p[1]
 
-# class Ball(pygame.sprite.Sprite):
+class Ball(pygame.sprite.Sprite):
 
 
-# 	def __init__(self, color):
-# 		super().__init__()
-# 		hit_count = 0
-# 		velocity = 4.0
+	def __init__(self, color):
+		super().__init__()
+		hit_count = 0
+		velocity = 4.0
 
-# 		x = 0.0
-# 		y = 180.0
+		x = 0.0
+		y = 180.0
 
-# 		direction = 250
+		direction = random.randint(200,300)
 
-# 		height = 10
-# 		width = 10
+		height = 10
+		width = 10
 
-# 		self.image = pygame.Surface([self.width, self.height])
-# 		self.image.fill(ball_white)
-# 		self.rect = self.image.get_rect()
+		self.image = pygame.Surface([self.width, self.height])
+		self.image.fill(ball_white)
+		self.rect = self.image.get_rect()
 	
 # 	def increment_hit(self):
 # 		self.hit_count = self.hit_count + 1
@@ -104,14 +107,32 @@ class Paddle(pygame.sprite.Sprite):
 # 		dems.add(blue_parties)
 # 		two_party_system.add(blue_parties)
 		
-# # for rown in range(3):
-# # 	for column in range(30):
-# # 		red_parties = Red_Party(brick_red, column * (brick_width+2)+1, y_pos)
-# # 		reps.add(red_parties)
-# # 		two_party_system.add(red_parties)
+# for rown in range(3):
+# 	for column in range(30):
+# 		red_parties = Red_Party(brick_red, column * (brick_width+2)+1, y_pos)
+# 		reps.add(red_parties)
+# 		two_party_system.add(red_parties)
 # # lost_game = False
 # # while not lost_game:
 # #     two_party_system.draw(gameDisplay)
 
 # pygame.init()
+
+b = Blue_Party(100, 100)
+r = Red_Party(50, 50)
+p = Paddle(275, 390)
+sprites = RenderPlain(b, r, p)
+
+while True:
+	e = event.poll()
+	if e.type == QUIT:
+		quit()
+		break
+	# elif:
+	# 	e.type == 
+	gameDisplay.fill(background_black)
+	p.move()
+	sprites.update()
+	sprites.draw(gameDisplay)
+	display.update()
 
