@@ -2,6 +2,8 @@
 #gold game from Colleen's repo
 import pygame
 import random
+import math
+from math import *
 from pygame import *
 from pygame.sprite import *
 pygame.init()
@@ -72,100 +74,95 @@ class Paddle(pygame.sprite.Sprite):
 		self.rect.x = p[0]
 		#self.rect.y = p[1]
 
-# class Ball(pygame.sprite.Sprite):
+class Ball(pygame.sprite.Sprite):
 
 
-# 	def __init__(self, x, y):
-# 		super().__init__()
-# 		self.image = pygame.Surface([ball_width, ball_height])
-# 		self.image.fill(ball_white)
-# 		self.rect = self.image.get_rect()
+	def __init__(self, x, y):
+		super().__init__()
+		self.image = pygame.Surface([ball_width, ball_height])
+		self.image.fill(ball_white)
+		self.rect = self.image.get_rect()
 		
-# 		hit_count = 0
-# 		velocity = 4.0
+		hit_count = 0
+		velocity = 4.0
 
-# 		direction = random.randint(200,300)
+		direction = random.randint(200,300)
 
-# 		height = 10
-# 		width = 10
+		height = 10
+		width = 10
 
-# 		self.screenheight = pygame.display.get_surface().get_height()
-# 		self.screenwidth = pygame.display.get_surface().get_width()
+		self.rect.x = x
+		self.rect.y = y
 
-# 	def deflect(self):
-# 		self.direction = (180 - self.direction) % 360
-# 		self.direction = self.direction - ball_presence
+		self.screenheight = pygame.display.get_surface().get_height()
+		self.screenwidth = pygame.display.get_surface().get_width()
 
-# 	def ball_bounce(self):
-# 		ball_move = math.radians(self.direction)
-# 		self.x = self.x + (self.velocity * math.sin(ball_move))
-# 		self.y -= (self.velocity & math.cos(ball_move))
+	def deflect(self):
+		self.direction = (180 - self.direction) % 360
+		self.direction = self.direction - ball_presence
 
-# 		self.rect.x = x
-# 		self.rect.y = y
+	def ball_bounce(self):
+		ball_move = math.radians(self.direction)
+		self.x = self.x + (self.velocity * math.sin(ball_move))
+		self.y -= (self.velocity & math.cos(ball_move))
 
 	
-	# def hit(self, target)
-	# 	return self.rect.colliderect(target)
+	def hit(self, target):
+		return self.rect.colliderect(target)
 
-# def increment_hit(self):
-# 		self.hit_count = self.hit_count + 1
-# 		if self.hit_count % 1 == 0:
-# 			for ball in self.balls:
-# 				ball.velocity = ball.velocity + 10
-# #class Game(game):
-# 	#def __init__(self):
-# 		#super().__init__()
-
-
-# dems = pygame.sprite.Group()
-# reps = pygame.sprite.Group()
-# two_party_system = pygame.sprite.Group()
-# y_pos = 80
-# for row in range(3):
-# 	for column in range(30):
-# 		blue_parties = Blue_Party(brick_blue, column * (brick_width+2)+1, y_pos)
-# 		dems.add(blue_parties)
-# 		two_party_system.add(blue_parties)
-		
-# for rown in range(3):
-# 	for column in range(30):
-# 		red_parties = Red_Party(brick_red, column * (brick_width+2)+1, y_pos)
-# 		reps.add(red_parties)
-# 		two_party_system.add(red_parties)
-# # lost_game = False
-# # while not lost_game:
-# #     two_party_system.draw(gameDisplay)
-
-# pygame.init()
 
 b = pygame.sprite.Group()
-r = Red_Party(50, 50)
+r = pygame.sprite.Group()
 p = Paddle(275, 390)
-y_pos = 50
+bl = Ball(275,380)
+y_pos = 10
+y_pos_red = 55
 num_blocks = 12
 
 for row in range(0,4):
 	for column in range(0,num_blocks):
-		dems = Blue_Party(column * (brick_width + 2) + 1, num_blocks)
+		dems = Blue_Party(column * (brick_width + 2) + 1, y_pos)
 		b.add(dems)
-	num_blocks += brick_height + 1
-# bl = Ball(275, 380)
-sprites = RenderPlain(b, r, p)
+	y_pos += brick_height + 1
+for rown in range(0,4):
+	for column in range(0, num_blocks):
+		reps = Red_Party(column*(brick_width+2)+1,y_pos_red)
+		r.add(reps)
+	y_pos_red+=brick_height+1
+
+sprites = RenderPlain(b, r, p, bl)
+
+finish_game = False
 
 while True:
 	e = event.poll()
 	if e.type == QUIT:
 		quit()
 		break
+	if not finish_game:
+		p.move()
+		finish_game = bl.ball_bounce()
+	if pygame.sprite.spritecollide(p,bl,False):
+		ball_presence = (p.rect.x + p.width/2) - (b.rect.x+bl.width/2)
+		bl.rect.y = screen.get_height() - p.rect.heigth - bl.rect.heigth -1
+		bl.deflect(ball_presence)
+	dissolve_blocks = pygame.sprite.spritecollide(bl,r,True)
+	if len(dissolve_blocks) > 0:
+		finish_game = True
+		if len(r) == 0:
+			finish_game = True
+
+
+
 	# else:
 	# 	if pygame.sprite.spritecollide(p, bl, False):
 	# 		ball_presence = (p.rect.x + p.width/2) - (b.rect.x+b.width/2)
 	# 		b.rect.y = screen.get_height() - p.rect.height - b.rect.height - 1
 	# 		b.bounce(ball_presence)
 	gameDisplay.fill(background_black)
-	p.move()
+	# p.move()
 	sprites.update()
 	sprites.draw(gameDisplay)
 	display.update()
+pygame.quit()
 
