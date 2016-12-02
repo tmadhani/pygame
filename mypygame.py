@@ -101,15 +101,14 @@ class Ball(pygame.sprite.Sprite):
 			return False
 
 pygame.init()
-
+screen_pic = pygame.image.load("media/capitol_hill.bmp")
 gameDisplay = pygame.display.set_mode((600,400))
-
 pygame.display.set_caption("Political Breakout")
 
 pygame.mouse.set_visible(False)
 
-f = pygame.font.Font(None,25)
-
+f = pygame.font.Font(None,45)
+l = pygame.font.Font(None, 35)
 bg = pygame.Surface(gameDisplay.get_size())
 
 democrats = pygame.sprite.Group()
@@ -127,15 +126,15 @@ total_sprites.add(ball)
 
 y_pos = 10
 y_pos_red = 55
-num_blocks = 12
+num_blocks = 10
 
-for row in range(0,4):
+for row in range(4):
 	for column in range(0,num_blocks):
 		dems = Blue_Party(column * (brick_width + 2) + 1, y_pos)
 		democrats.add(dems)
 		two_party_system.add(dems)
 	y_pos += brick_height + 2
-for row in range(0,4):
+for row in range(4):
 	for column in range(0, num_blocks):
 		reps = Red_Party(column*(brick_width+2)+1,y_pos_red)
 		republicans.add(reps)
@@ -153,7 +152,8 @@ hits = 0
 
 while not close_game:
 	timer.tick(30)
-	gameDisplay.fill(background_black)
+	# gameDisplay.fill(background_black)
+	gameDisplay.blit(screen_pic,(0,0))
 
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -164,13 +164,21 @@ while not close_game:
 		finish_game = ball.update()
 
 	if finish_game:
-		text = f.render("You were not able to break the two party system", True, ball_white)
-		text_loc = text.get_rect(centerx=bg.get_width()/2)
-		text_loc.top = 200
-		gameDisplay.blit(text, text_loc)
+		pygame.mixer.Sound("media/national-anthem.wav").play()
+		if len(two_party_system) == 0:
+			text = l.render("You were successfully able to break the two party system!", True, ball_white)
+			text_loc = text.get_rect(centerx=bg.get_width()/2)
+			text_loc.top = 200
+			gameDisplay.blit(text,text_loc)
+		else:
+			text = l.render("You were not able to break the two party system.", True, ball_white)
+			text_loc = text.get_rect(centerx=bg.get_width()/2)
+			text_loc.top = 200
+			gameDisplay.blit(text, text_loc)
 
 	if pygame.sprite.spritecollide(ball, two_party_system, False):
-	    ball.speed+=5
+		pygame.mixer.Sound("media/bloop.wav").play()
+		ball.speed+=5
 
 	if pygame.sprite.spritecollide(p,balls,False):
 		ball_presence = (p.rect.x + p.width/2) - (ball.rect.x+ball.width/2)
@@ -187,12 +195,6 @@ while not close_game:
 
 	if len(dissolve_blocks) > 0:
 		ball.deflect(0)
-		if len(two_party_system) == 0:
-			finish_game = True
-			text = f.render("You were successfully able to break the two party system!", True, ball_white)
-			text_loc = text.get_rect(centerx=bg.get_width()/2)
-			text_loc.top = 200
-			gameDisplay.blit(text,text_loc)
 
 	total_sprites.draw(gameDisplay)
 	pygame.display.flip()
