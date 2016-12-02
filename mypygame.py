@@ -1,10 +1,8 @@
-#TANYA'S BREAKOUT GAME
-#gold game from Colleen's repo
+
 import pygame
 import math
 import random
-# from pygame.sprite import *
-# pygame.init()
+
 
 brick_red = (255, 0, 0)
 brick_blue = (0,0,255)
@@ -18,13 +16,13 @@ brick_height = 10
 
 
 class Red_Party(pygame.sprite.Sprite):
-    def __init__(self, x, y):
-        super().__init__()
-        self.image = pygame.Surface([brick_width, brick_height])
-        self.image.fill(brick_red)
-        self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+	def __init__(self, x, y):
+		super().__init__()
+		self.image = pygame.Surface([brick_width, brick_height])
+		self.image.fill(brick_red)
+		self.rect = self.image.get_rect()
+		self.rect.x = x
+		self.rect.y = y
 
 class Blue_Party(pygame.sprite.Sprite):
 	def __init__(self, x, y):
@@ -34,16 +32,14 @@ class Blue_Party(pygame.sprite.Sprite):
 		self.rect = self.image.get_rect()
 		self.rect.x = x
 		self.rect.y = y
-		# self.width = paddle_width
-		# self.height = paddle_height
 
 class Paddle(pygame.sprite.Sprite):
 	def __init__(self):
 		super().__init__()
-		self.width = 50
-		self.height = 10
-		self.image = pygame.Surface([self.width, self.height])
-		self.image.fill(paddle_green)
+		self.image = pygame.image.load("media/vote.bmp")
+		self.width = 46
+		self.height = 53
+		# self.image.fill(paddle_green)
 		self.rect = self.image.get_rect()
 		self.screenheight = pygame.display.get_surface().get_height()
 		self.screenwidth = pygame.display.get_surface().get_width()
@@ -59,7 +55,7 @@ class Paddle(pygame.sprite.Sprite):
 class Ball(pygame.sprite.Sprite):
 	speed = 10.0
 
-	direction = random.randint(200,250)
+	direction = random.randint(180,200)
 
 	x = 275
 	y = 200
@@ -103,9 +99,6 @@ class Ball(pygame.sprite.Sprite):
 			return True
 		else:
 			return False
-	
-	def hit(self, target):
-		return self.rect.colliderect(target)
 
 pygame.init()
 
@@ -176,21 +169,32 @@ while not close_game:
 		text_loc.top = 200
 		gameDisplay.blit(text, text_loc)
 
-	if ball.hit(reps):
-		ball.speed+=10
+	if pygame.sprite.spritecollide(ball, two_party_system, False):
+	    ball.speed+=5
+
 	if pygame.sprite.spritecollide(p,balls,False):
 		ball_presence = (p.rect.x + p.width/2) - (ball.rect.x+ball.width/2)
 		ball.rect.y = gameDisplay.get_height() - p.rect.height - ball.rect.height -1
 		ball.deflect(ball_presence)
 
 	dissolve_blocks = pygame.sprite.spritecollide(ball,two_party_system,True)
+	for block in dissolve_blocks:
+		hits +=1
+	new_t = f.render('Hits: ' + str(hits), False, ball_white)
+	text_loc = new_t.get_rect(centerx=bg.get_width()/2)
+	text_loc.top = 300
+	gameDisplay.blit(new_t, text_loc)
+
 	if len(dissolve_blocks) > 0:
 		ball.deflect(0)
 		if len(two_party_system) == 0:
 			finish_game = True
+			text = f.render("You were successfully able to break the two party system!", True, ball_white)
+			text_loc = text.get_rect(centerx=bg.get_width()/2)
+			text_loc.top = 200
+			gameDisplay.blit(text,text_loc)
 
 	total_sprites.draw(gameDisplay)
 	pygame.display.flip()
 
 pygame.quit()
-
