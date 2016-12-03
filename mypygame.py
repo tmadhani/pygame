@@ -3,11 +3,10 @@ import pygame
 import math
 import random
 
-
+#set colors
 brick_red = (255, 0, 0)
 brick_blue = (0,0,255)
 ball_white = (255,255,255)
-paddle_green = (50, 205, 50)
 background_black = (0,0,0)
 
 #set brick sprite height/wdith
@@ -39,7 +38,6 @@ class Paddle(pygame.sprite.Sprite):
 		self.image = pygame.image.load("media/vote.bmp")
 		self.width = 46
 		self.height = 53
-		# self.image.fill(paddle_green)
 		self.rect = self.image.get_rect()
 		self.screenheight = pygame.display.get_surface().get_height()
 		self.screenwidth = pygame.display.get_surface().get_width()
@@ -55,7 +53,7 @@ class Paddle(pygame.sprite.Sprite):
 class Ball(pygame.sprite.Sprite):
 	speed = 10.0
 
-	direction = random.randint(180,200)
+	direction = random.randint(190,200)
 
 	x = 275
 	y = 200
@@ -126,7 +124,7 @@ total_sprites.add(ball)
 
 y_pos = 10
 y_pos_red = 55
-num_blocks = 10
+num_blocks = 12
 
 for row in range(4):
 	for column in range(0,num_blocks):
@@ -166,11 +164,13 @@ while not close_game:
 	if finish_game:
 		pygame.mixer.Sound("media/national-anthem.wav").play()
 		if len(two_party_system) == 0:
-			text = l.render("You were successfully able to break the two party system!", True, ball_white)
+			text = l.render("You were able to break the two party system!", True, ball_white)
 			text_loc = text.get_rect(centerx=bg.get_width()/2)
 			text_loc.top = 200
 			gameDisplay.blit(text,text_loc)
 		else:
+			gameDisplay.fill(background_black)
+			total_sprites.empty()
 			text = l.render("You were not able to break the two party system.", True, ball_white)
 			text_loc = text.get_rect(centerx=bg.get_width()/2)
 			text_loc.top = 200
